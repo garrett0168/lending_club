@@ -129,7 +129,6 @@ module LendingClub
     end
 
     def self.collection(data_hash)
-      puts data_hash.inspect
       return [] unless data_hash['myNotes']
       data_hash['myNotes'].map do |loan|
         new(loan)

@@ -40,7 +40,6 @@ module LendingClub
     attr_reader :received_late_fees
 
     def initialize(data_hash)
-      puts data_hash.inspect
       @available_cash = BigDecimal.new(data_hash['availableCash'].to_s)
       @investor_id = Integer(data_hash['investorId'])
       @accrued_interest = BigDecimal.new(data_hash['accruedInterest'].to_s)
