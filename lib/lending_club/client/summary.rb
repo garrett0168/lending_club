@@ -40,18 +40,19 @@ module LendingClub
     attr_reader :received_late_fees
 
     def initialize(data_hash)
-      @available_cash = BigDecimal.new(data_hash['availableCash'])
+      puts data_hash.inspect
+      @available_cash = BigDecimal.new(data_hash['availableCash'].to_s)
       @investor_id = Integer(data_hash['investorId'])
-      @accrued_interest = BigDecimal.new(data_hash['accruedInterest'])
-      @outstanding_principal = BigDecimal.new(data_hash['outstandingPrincipal'])
-      @account_total = BigDecimal.new(data_hash['accountTotal'])
+      @accrued_interest = BigDecimal.new(data_hash['accruedInterest'].to_s)
+      @outstanding_principal = BigDecimal.new(data_hash['outstandingPrincipal'].to_s)
+      @account_total = BigDecimal.new(data_hash['accountTotal'].to_s)
       @total_notes = Integer(data_hash['totalNotes'])
       @total_portfolios = Integer(data_hash['totalPortfolios'])
-      @in_funding_balance = BigDecimal.new(data_hash['infundingBalance'])
-      @received_interest = BigDecimal.new(data_hash['receivedInterest'])
-      @received_principal = BigDecimal.new(data_hash['receivedPrincipal'])
+      @in_funding_balance = BigDecimal.new(data_hash['infundingBalance'].to_s)
+      @received_interest = BigDecimal.new(data_hash['receivedInterest'].to_s)
+      @received_principal = BigDecimal.new(data_hash['receivedPrincipal'].to_s)
       if data_hash['receivedLateFees']
-        @received_late_fees = BigDecimal.new(data_hash['receivedLateFees'])
+        @received_late_fees = BigDecimal.new(data_hash['receivedLateFees'].to_s)
       end
     end
 

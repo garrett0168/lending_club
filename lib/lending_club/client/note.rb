@@ -81,18 +81,23 @@ module LendingClub
     attr_reader :interest_received
     # @return [BigDecimal] Principal received
     attr_reader :principal_received
+    # @return [String, nil] Last payment date
+    attr_reader :last_payment_date
+    # @return [String] Application type
+    attr_reader :application_type
 
     def initialize(data_hash)
       @loan_status = data_hash['loanStatus'].to_s
       @loan_id = Integer(data_hash['loanId'])
+      @application_type = data_hash['applicationType']
       if data_hash['portfolioName']
         @portfolio_name = data_hash['portfolioName'].to_s
       end
       @note_id = Integer(data_hash['noteId'])
       @grade = data_hash['grade'].to_s
-      @loan_amount = BigDecimal.new(data_hash['loanAmount'])
-      @accrued_interest = BigDecimal.new(data_hash['accruedInterest'])
-      @note_amount = BigDecimal.new(data_hash['noteAmount'])
+      @loan_amount = BigDecimal.new(data_hash['loanAmount'].to_s)
+      @accrued_interest = BigDecimal.new(data_hash['accruedInterest'].to_s)
+      @note_amount = BigDecimal.new(data_hash['noteAmount'].to_s)
       @purpose = data_hash['purpose'].to_s
       @interest_rate = Float(data_hash['interestRate'])
       if data_hash['portfolioId']
@@ -109,21 +114,25 @@ module LendingClub
       if data_hash['currentPaymentStatus']
         @current_payment_status = data_hash['currentPaymentStatus'].to_s
       end
-      @can_be_traded = boolean(data_hash['canBeTraded'])
-      @payments_received = BigDecimal.new(data_hash['paymentsReceived'])
+      @can_be_traded = !!data_hash['canBeTraded']
+      @payments_received = BigDecimal.new(data_hash['paymentsReceived'].to_s)
       if data_hash['nextPaymentDate']
         @next_payment_date = data_hash['nextPaymentDate'].to_s
       end
-      @principal_pending = BigDecimal.new(data_hash['principalPending'])
-      @interest_pending = BigDecimal.new(data_hash['interestPending'])
-      @interest_received = BigDecimal.new(data_hash['interestReceived'])
-      @principal_received = BigDecimal.new(data_hash['principalReceived'])
+      if data_hash['lastPaymentDate']
+        @last_payment_date = data_hash['lastPaymentDate'].to_s
+      end
+      @principal_pending = BigDecimal.new(data_hash['principalPending'].to_s)
+      @interest_pending = BigDecimal.new(data_hash['interestPending'].to_s)
+      @interest_received = BigDecimal.new(data_hash['interestReceived'].to_s)
+      @principal_received = BigDecimal.new(data_hash['principalReceived'].to_s)
     end
 
     def self.collection(data_hash)
-      return [] unless data_hash['loans']
-      data_hash['loans'].map do |loan|
-        new(loan.tap {|h| h['asOfDate'] = data_hash['asOfDate']})
+      puts data_hash.inspect
+      return [] unless data_hash['myNotes']
+      data_hash['myNotes'].map do |loan|
+        new(loan)
       end
     end
 
